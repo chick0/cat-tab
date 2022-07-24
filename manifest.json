@@ -1,0 +1,21 @@
+{
+    "name": "cat.ext",
+    "version": "1.0",
+    "author": "chick_0",
+    "description": "Just a Cat.",
+    "offline_enabled": true,
+    "chrome_url_overrides" : {
+    	"newtab": "app/index.html"
+  	},
+    "icons": {
+        "64": "icons/64.png",
+        "128": "icons/128.png",
+        "192": "icons/192.png"
+    },
+    "browser_specific_settings": {
+        "gecko": {
+            "strict_min_version": "100.0"
+        }
+    },
+    "manifest_version": 2
+}
