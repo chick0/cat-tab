@@ -1,9 +1,8 @@
 {
     "name": "cat.ext",
-    "version": "1.0",
+    "version": "1.0.0",
     "author": "chick_0",
     "description": "Just a Cat.",
-    "offline_enabled": true,
     "chrome_url_overrides" : {
     	"newtab": "app/index.html"
   	},
@@ -14,6 +13,7 @@
     },
     "browser_specific_settings": {
         "gecko": {
+            "id": "cat-ext@ch1ck.xyz", 
             "strict_min_version": "100.0"
         }
     },
