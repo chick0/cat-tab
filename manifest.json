@@ -1,8 +1,8 @@
 {
-    "name": "cat.ext",
+    "name": "Cat Tab",
     "version": "1.0.0",
     "author": "chick_0",
-    "description": "Just a Cat.",
+    "description": "Meet the cat on the new tab.",
     "chrome_url_overrides" : {
     	"newtab": "app/index.html"
   	},
