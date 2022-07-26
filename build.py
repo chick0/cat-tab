@@ -24,7 +24,7 @@ def main():
 
     with ZipFile(
         file="dist/{name}-{version}.zip".format(
-            name=metadata['name'],
+            name=metadata['name'].replace(" ", "_"),
             version=metadata['version']
         ),
         mode="w",
