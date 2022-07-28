@@ -8,7 +8,7 @@ from zipfile import ZIP_DEFLATED
 def get_files() -> list:
     return [
         x for x in glob("**", recursive=True)
-        if not x.startswith("dist") and not x.endswith(".py")
+        if not x.startswith("dist") and not x.endswith(".py") and not x.endswith(".md")
     ]
 
 
