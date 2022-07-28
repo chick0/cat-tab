@@ -1,5 +1,5 @@
 html{
-    background-color: #171717;
+    background-color: #FFF;
     overflow: hidden;
 
     width: 100%;
@@ -8,4 +8,10 @@ html{
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+@media (prefers-color-scheme: dark) {
+    html {
+        background-color: #1c1b22;
+    }
 }
