@@ -29,6 +29,7 @@ export default [
     "/src/9ba19b8e61b8d14c1adfbab2efe1c2a1de93a369e635caa3ac6d057757c7aff4.webp",
     "/src/9fc094d69cad8434b0a8e91b72c66b64d9369e4404be56567367180b58eae7bc.webp",
     "/src/a01b17930aae6dbf12187266b0fa4a740c443dc05ccb785d3bc692b22959e7ce.webp",
+    "/src/a0df01a7b6407db695d19423ef4564f38d5e9fed1a7c9f98682e9cf7b4fbe74e.webp",
     "/src/ab6a588b5dd631c520d395a30b1b2a83de7fa7e2e6f15ec43bdd9ebb6a6e8c97.webp",
     "/src/b1e32abdb2156bb40b90b1a3b68ea9626a88985e5ccf17755cac0afd099a942e.webp",
     "/src/b24993c072362c11e6306eee0248c519cce820855c4c06d67caf3de59104ef04.webp",
