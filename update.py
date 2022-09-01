@@ -4,7 +4,7 @@ from os.path import join
 from json import dumps
 from hashlib import sha256
 
-PATH = join(".", "src")
+PATH = join(".", "src", "cats")
 
 
 def main():
@@ -19,16 +19,17 @@ def main():
 
         new_name = sha256(image).hexdigest() + ".webp"
         if path != new_name:
+            print("renamed:", path)
             rename(old_img_path, join(PATH, new_name))
 
     json = "// auto generated with update.py\n" + \
          "export default " + dumps(
-            obj=[f"/src/{x}" for x in [x for x in listdir(PATH) if x.endswith(".webp")]],
+            obj=[f"/src/cats/{x}" for x in [x for x in listdir(PATH) if x.endswith(".webp")]],
             indent=4,
             sort_keys=True
         ) + ";"
 
-    with open(join(".", "app", "cats.js"), mode="w", encoding="utf-8") as cats_writer:
+    with open(join(".", "share", "cats.js"), mode="w", encoding="utf-8") as cats_writer:
         cats_writer.write(json)
 
 

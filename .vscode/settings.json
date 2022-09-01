@@ -1,0 +1,8 @@
+{
+    "files.exclude": {
+        ".vscode": true,
+        "*.py": true,
+        "dist/": true,
+        "src/": true
+    }
+}

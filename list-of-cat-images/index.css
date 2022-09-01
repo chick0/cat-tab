@@ -1,0 +1,15 @@
+html {
+    overflow-y: scroll !important;
+}
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+img {
+    max-width: calc((100% / 4) - 5px * 2);
+    height: max-content;
+    padding: 5px;
+}
