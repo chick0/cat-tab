@@ -1,20 +1,24 @@
 import cats from "/share/cats.js";
+import { registerLink } from "../share/link.js";
 
 const flex = document.querySelector("section.flex");
 
-// add cat images
-cats.forEach(cat => {
-    const img = document.createElement("img");
-    img.src = cat;
+/**
+ * Render 'List of cat images' display
+ */
+function render() {
+    flex.innerHTML = "";
+    cats.forEach((path) => {
+        const img = document.createElement("img");
+        img.src = path;
 
-    img.addEventListener('click', (event) => {
-        window.open(event.target.src);
+        img.addEventListener('click', (event) => {
+            window.open(event.target.src);
+        });
+
+        flex.appendChild(img);
     });
+}
 
-    flex.appendChild(img);
-});
-
-// add click handler
-document.querySelector("span.link").addEventListener("click", () => {
-    window.location.replace("/tab/index.html");
-});
+render();
+registerLink("/tab/index.html");
