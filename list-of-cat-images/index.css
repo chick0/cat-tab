@@ -13,3 +13,7 @@ img {
     height: max-content;
     padding: 5px;
 }
+
+img.clicked {
+    max-width: calc(100% - 5px * 2);
+}
