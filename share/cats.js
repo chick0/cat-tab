@@ -1,5 +1,6 @@
 // auto generated with update.py
 export default [
+    "/src/cats/01c4d503577a2420caf5d9e7e460347b37b9169730f2add6aee38e6eed570054.webp",
     "/src/cats/09394cd247a2f283310b6a4f91e07590907db89b184a235166d8380657d8c0dd.webp",
     "/src/cats/0f58451e6bf899dfaef06b8d09ab62fedaff7d47c19007064457470e1f96eabe.webp",
     "/src/cats/1d75e8319713d2f5fdfa898f1da7521a5fd13d978d8c3898cbfefe31d8825d26.webp",
