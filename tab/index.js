@@ -10,4 +10,4 @@ function updateImage(){
 }
 
 updateImage();
-registerLink("/list-of-cat-images/index.html");
+registerLink("/cats/index.html");
