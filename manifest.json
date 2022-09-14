@@ -6,6 +6,9 @@
     "chrome_url_overrides" : {
     	"newtab": "tab/index.html"
   	},
+    "chrome_settings_overrides": {
+        "homepage": "tab/index.html"
+	},
     "icons": {
         "64": "src/icons/64.png",
         "128": "src/icons/128.png",
