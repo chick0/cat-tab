@@ -46,9 +46,7 @@ img:hover {
 }
 
 .link:hover {
-    --link-bg: #212121;
-    --link-color: #FFCC4D;
-    --link-border: var(--link-color);
+    --link-bg: #FFDB81;
 }
 
 section {
