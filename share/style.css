@@ -1,4 +1,5 @@
 :root{
+    /* dark theme is default */
     --background: #212121;
     --text: #FFFFFF;
     --normal: #FFCC4D;
@@ -8,14 +9,6 @@
 html{
     color: var(--text);
     background-color: var(--background);
-    overflow: hidden;
-
-    width: 100%;
-    height: 100%;
-
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 .link {
@@ -38,18 +31,4 @@ html{
     cursor: pointer;
     color: var(--hover);
     text-decoration: underline solid var(--hover);
-}
-
-section {
-    font-size: 20px;
-    text-align: left !important;
-    margin-left: 5%;
-    margin-right: 5%;
-}
-
-@media (min-width: 700px) {
-    section {
-        margin-left: 20%;
-        margin-right: 20%;
-    }
 }
