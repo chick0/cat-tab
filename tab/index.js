@@ -15,19 +15,19 @@ registerLink();
 /**
  * Keyboard Shortcuts
  * 
- * f: Fullscreen
- * r: Change random cat image
+ * F: Toggle fullscreen mode
+ * R: Change random cat image
  */
 document.addEventListener("keypress", (event) => {
-    const key = event.key.toLowerCase();
+    const key = event.key.toUpperCase();
 
-    if (key == "f") {
+    if (key == "F") {
         if (document.fullscreenElement == null) {
             document.querySelector("html").requestFullscreen();
         } else {
             document.exitFullscreen();
         }    
-    } else if (key == "r") {
+    } else if (key == "R") {
         updateImage();
     }
 });
@@ -42,5 +42,27 @@ document.addEventListener("fullscreenchange", () => {
         link.style.display = "block";
     } else {
         link.style.display = "none";
+    }
+});
+
+/**
+ * Keyboard Shortcuts Help box
+ */
+const helpBox = document.querySelector("div.help");
+
+helpBox.hideIt = () => {
+    helpBox.style.display = "none";
+    localStorage.setItem("help", "no");
+}
+
+if(localStorage.getItem("help") === "no") {
+    helpBox.hideIt();
+}
+
+helpBox.addEventListener("click", () => {
+    if(confirm("Hide this help box?")) {
+        helpBox.hideIt();
+    } else {
+        alert("Canceled.");
     }
 });

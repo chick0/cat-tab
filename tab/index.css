@@ -22,3 +22,21 @@ html{
     color: var(--hover);
     text-decoration: underline solid var(--hover);
 }
+
+.help {
+    width: 13%;
+    right: 0;
+    position: absolute;
+
+    background-color: var(--background);
+    padding: 10px;
+    border-radius: .25rem;
+}
+
+.help:hover {
+    cursor: pointer;
+}
+
+th {
+    padding-right: 10px;
+}
