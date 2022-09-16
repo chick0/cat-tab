@@ -32,8 +32,10 @@ img:hover {
     display: block;
     position: sticky;
     bottom: 15px;
-    margin-left: 20%;
-    margin-right: 20%;
+
+    --weight: 20px;
+    margin-left: calc(20% + var(--weight));
+    margin-right: calc(20% + var(--weight));
 
     font-size: large;
     text-align: center;
