@@ -1,10 +1,9 @@
 /**
- * Add 'click' event listener in link text
- * 
- * @param {string} path 
+ * Add 'click' event listener in link text 
  */
-export function registerLink(path){
-    document.querySelector("span.link").addEventListener("click", () => {
-        window.location.replace(path);
+export function registerLink(){
+    document.querySelector("span.link").addEventListener("click", (event) => {
+        const href = event.target.dataset.href;
+        window.location.replace(href);
     });
 }

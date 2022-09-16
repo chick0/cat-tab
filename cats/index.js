@@ -52,4 +52,4 @@ function render() {
 }
 
 render();
-registerLink("/tab/index.html");
+registerLink();

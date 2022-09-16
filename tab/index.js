@@ -10,7 +10,7 @@ function updateImage(){
 }
 
 updateImage();
-registerLink("/cats/index.html");
+registerLink();
 
 /**
  * Keyboard Shortcuts
