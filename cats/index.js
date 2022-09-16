@@ -7,7 +7,6 @@ const flex = document.querySelector("section.flex");
  * Render 'List of cat images' page
  */
 function render() {
-    flex.innerHTML = "";
     cats.forEach((path) => {
         const img = document.createElement("img");
         img.src = path;

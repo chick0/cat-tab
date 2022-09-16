@@ -6,3 +6,19 @@ html{
     background-repeat: no-repeat;
     background-position: center;
 }
+
+.link {
+    left: 30px;
+    bottom: 30px;
+    position: absolute;
+
+    color: var(--normal);
+    text-decoration: none;
+}
+
+.link:hover {
+    cursor: pointer;
+
+    color: var(--hover);
+    text-decoration: underline solid var(--hover);
+}
