@@ -33,7 +33,13 @@ html{
     border-radius: .25rem;
 }
 
-.help:hover {
+.help-x {
+    position:absolute;
+    right: 10px;
+    color: crimson;
+}
+
+.click:hover {
     cursor: pointer;
 }
 

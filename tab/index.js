@@ -1,10 +1,11 @@
 import cats from "/share/cats.js";
 import { registerLink } from "../share/link.js";
+import * as Keyboard from "./keyboard.js";
 
 /**
  * Update random cat image
  */
-function updateImage(){
+export function updateImage(){
     const src = cats[Math.floor(Math.random() * cats.length)];
     document.querySelector("html").style.backgroundImage = `url(${src})`;
 }
@@ -13,22 +14,14 @@ updateImage();
 registerLink();
 
 /**
- * Keyboard Shortcuts
- * 
- * F: Toggle fullscreen mode
- * R: Change random cat image
+ * Keyboard Shortcuts event handler
  */
 document.addEventListener("keypress", (event) => {
     const key = event.key.toUpperCase();
+    const func = Keyboard[key];
 
-    if (key == "F") {
-        if (document.fullscreenElement == null) {
-            document.querySelector("html").requestFullscreen();
-        } else {
-            document.exitFullscreen();
-        }    
-    } else if (key == "R") {
-        updateImage();
+    if (func != undefined) {
+        func();
     }
 });
 
@@ -59,10 +52,21 @@ if(localStorage.getItem("help") === "no") {
     helpBox.hideIt();
 }
 
-helpBox.addEventListener("click", () => {
-    if(confirm("Hide this help box?")) {
-        helpBox.hideIt();
-    } else {
-        alert("Canceled.");
-    }
-});
+document.querySelector("span.help-x")
+    .addEventListener("click", () => {
+        if(confirm("Hide this help box?")) {
+            helpBox.hideIt();
+        } else {
+            alert("Canceled.");
+        }
+    });
+
+/**
+ * Set Keyboard Shortcuts click event handler
+ */
+document.querySelectorAll(".click.to-keyboard")
+    .forEach((element) => {
+        element.addEventListener("click", (event) => {
+            Keyboard[event.target.dataset.key]();
+        });
+    });
