@@ -32,7 +32,8 @@ def main():
         compresslevel=9
     ) as zip:
         for file in files:
-            print(" +", file), zip.write(file)
+            print(" +", file)
+            zip.write(file)
 
 
 if __name__ == "__main__":

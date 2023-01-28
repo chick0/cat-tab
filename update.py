@@ -4,7 +4,7 @@ from os.path import join
 from json import dumps
 from hashlib import sha256
 
-PATH = join(".", "src", "cats")
+PATH = join(".", "cats")
 
 
 def main():
@@ -24,12 +24,12 @@ def main():
 
     json = "// auto generated with update.py\n" + \
          "export default " + dumps(
-            obj=[f"/src/cats/{x}" for x in [x for x in listdir(PATH) if x.endswith(".webp")]],
+            obj=[f"/cats/{x}" for x in [x for x in listdir(PATH) if x.endswith(".webp")]],
             indent=4,
             sort_keys=True
         ) + ";"
 
-    with open(join(".", "share", "cats.js"), mode="w", encoding="utf-8") as cats_writer:
+    with open(join(".", "tab", "cats.js"), mode="w", encoding="utf-8") as cats_writer:
         cats_writer.write(json)
 
 

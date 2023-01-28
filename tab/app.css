@@ -1,4 +1,13 @@
+:root{
+    /* dark theme is default */
+    --background: #212121;
+    --text: #FFFFFF;
+    --help: #FF7F50;
+}
+
 html{
+    color: var(--text);
+    background-color: var(--background);
     overflow: hidden;
     width: 100%;
     height: 100%;
@@ -7,36 +16,28 @@ html{
     background-position: center;
 }
 
-.link {
-    left: 30px;
-    bottom: 30px;
-    position: absolute;
-
-    color: var(--normal);
-    text-decoration: none;
-}
-
-.link:hover {
-    cursor: pointer;
-
-    color: var(--hover);
-    text-decoration: underline solid var(--hover);
+.w-25 {
+    width: 25px;
+    display: inline-block;
+    text-align: center;
 }
 
 .help {
     width: 13%;
-    right: 0;
+    top: 15px;
+    right: 15px;
     position: absolute;
 
     background-color: var(--background);
     padding: 10px;
+    border: 1px solid var(--help);
     border-radius: .25rem;
 }
 
 .help-x {
-    position:absolute;
+    position: absolute;
     right: 10px;
-    color: crimson;
+    color: var(--help);
 }
 
 .click:hover {
@@ -45,4 +46,9 @@ html{
 
 th {
     padding-right: 10px;
+}
+
+p {
+    margin: 0;
+    padding: 0;
 }
