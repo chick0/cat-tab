@@ -1,25 +1,26 @@
-import { updateImage } from "./utils.js";
-
-// Set image in background
-updateImage();
+import { pickCatImageUrl } from "./utils.js"
 
 /**
- * Keyboard Shortcuts Help box
+ * Set random cat image to background
  */
-const helpBox = document.querySelector("div.help");
+function SetRandomCatImage() {
+    const image = document.querySelector("img")
+    const url = pickCatImageUrl()
 
-function hideBox() {
-    helpBox.style.display = "none";
-    localStorage.setItem("help", "no");
+    if (image != null) {
+        image.src = url
+    }
 }
 
-if (localStorage.getItem("help") === "no") {
-    hideBox();
-} else {
-    document.querySelector("span.help-x")
-        .addEventListener("click", () => {
-            if(confirm("Hide this help box?")) {
-                hideBox();
-            }
-        });
-}
+document.addEventListener("DOMContentLoaded", () => {
+    SetRandomCatImage()
+
+    document.addEventListener("keypress", (event) => {
+        switch (event.key) {
+            case "r":
+            case "R":
+                SetRandomCatImage()
+                break
+        }
+    })
+})
