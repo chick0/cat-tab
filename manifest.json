@@ -3,6 +3,11 @@
     "version": "1.3.0",
     "author": "chick_0",
     "description": "Meet the cat on the new tab.",
+    "background": {
+        "scripts": ["background/main.js"],
+        "persistent": false,
+        "type": "module"
+    },
     "chrome_url_overrides" : {
     	"newtab": "tab/app.html"
   	},

@@ -1,18 +1,16 @@
-import { pickCatImageUrl } from "./utils.js"
-
-/**
- * Set random cat image to background
- */
-function SetRandomCatImage() {
-    const image = document.querySelector("img")
-    const url = pickCatImageUrl()
-
-    if (image != null) {
-        image.src = url
-    }
-}
+import { pickCatImageUrl, pickCatImageFromCache } from "./utils.js"
 
 document.addEventListener("DOMContentLoaded", () => {
+    const image = document.querySelector("img")
+
+    image.onerror = () => {
+        image.src = pickCatImageFromCache()
+    }
+
+    const SetRandomCatImage = () => {
+        image.src = pickCatImageUrl()
+    }
+
     SetRandomCatImage()
 
     document.addEventListener("keypress", (event) => {
