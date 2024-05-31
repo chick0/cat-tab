@@ -1,3 +1,4 @@
+import { cacheUpdateHandler } from "./api.js"
 import { pickCatImageUrl, pickCatImageFromCache } from "./utils.js"
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -11,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         image.src = pickCatImageUrl()
     }
 
+    cacheUpdateHandler()
     SetRandomCatImage()
 
     document.addEventListener("keypress", (event) => {

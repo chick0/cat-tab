@@ -35,7 +35,10 @@ function getLastCacheTime() {
     return parsedStamp
 }
 
-function cacheUpdateHandler() {
+/**
+ * Update cat image list from api server
+ */
+export function cacheUpdateHandler() {
     const stamp = getTimeStamp()
     const lastTime = getLastCacheTime()
 
@@ -75,17 +78,4 @@ function cacheUpdateHandler() {
 
     console.log("[cat-tab] cache cleared")
     console.log("[cat-tab] file list updated")
-}
-
-////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
-
-// Install trigger
-browser.runtime.onInstalled.addListener(() => {
-    cacheUpdateHandler()
-})
-
-// Start-up trigger
-if (!browser.runtime.onInstalled.hasListener(cacheUpdateHandler)) {
-    browser.runtime.onStartup.addListener(cacheUpdateHandler)
 }
