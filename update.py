@@ -9,7 +9,7 @@ PATH = join(".", "cats")
 
 def main():
     path_list = [x for x in listdir(PATH) if x.endswith(".webp")]
-    print("total_imgs", len(path_list))
+    print("total imgs:", len(path_list))
 
     for path in path_list:
         old_img_path = join(PATH, path)
@@ -22,8 +22,8 @@ def main():
             print("renamed:", path)
             rename(old_img_path, join(PATH, new_name))
 
-    json = "// auto generated with update.py\n" + \
-         "export default " + dumps(
+    json = "// auto generated with update.py\nexport default " + \
+        dumps(
             obj=[f"/cats/{x}" for x in [x for x in listdir(PATH) if x.endswith(".webp")]],
             indent=4,
             sort_keys=True
