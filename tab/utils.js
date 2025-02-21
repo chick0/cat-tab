@@ -1,48 +1,44 @@
 import cats from "./cats.js"
 
 /**
- * @returns {string} Cat image url
+ * @returns {string} Image url (Local & from API)
  */
-export function pickCatImageUrl() {
+export function pickCatImage() {
     let fileList = localStorage.getItem("fileList") ?? []
 
-    if (fileList.length != 0) {
+    if (typeof fileList == "string") {
         fileList = JSON.parse(fileList)
     }
 
     const array = fileList.concat(cats)
 
-    const url = array[Math.floor(Math.random() * array.length)]
-
-    if (url.startsWith("/")) {
-        return url
-    }
-
-    const imageFromCache = localStorage.getItem(url)
-
-    if (imageFromCache != null) {
-        return imageFromCache
-    } else {
-        fetch(url)
-            .then((resp) => resp.blob())
-            .then((blob) => {
-                const reader = new FileReader()
-                reader.onload = () => {
-                    if (reader.result.startsWith("data:image/webp")) {
-                        localStorage.setItem(url, reader.result)
-                    }
-                }
-
-                reader.readAsDataURL(blob)
-            })
-    }
-
-    return url
+    return array[Math.ceil(Math.random() * array.length) - 1]
 }
 
 /**
- * @returns {string} Cat image url
+ * @returns {string} Local image url
  */
-export function pickCatImageFromCache() {
-    return cats[Math.floor(Math.random() * cats.length)]
+export function pickCatFromLocal() {
+    return cats[Math.ceil(Math.random() * cats.length) - 1]
+}
+
+/**
+ * @param {string} path
+ * @returns {string}
+ */
+export function getFileName(path) {
+    return path.replace(/^.*[\\\/]/, "").replace(/(\.[A-z]*)/, "")
+}
+
+/**
+ * @returns {string[]}
+ */
+export function getLocalHashList() {
+    let result = []
+
+    cats.forEach((cat) => {
+        result.push(getFileName(cat))
+    })
+
+    return result
 }

@@ -1,18 +1,29 @@
-import { cacheUpdateHandler } from "./api.js"
-import { pickCatImageUrl, pickCatImageFromCache } from "./utils.js"
+import { fileListUpdateHandler } from "./api.js"
+import { pickCatImage, pickCatFromLocal } from "./utils.js"
+
+/** Image load timeout  */
+const LOAD_TIMEOUT = 1000
+
+/** timeout ID */
+let timeoutChecker = null
 
 document.addEventListener("DOMContentLoaded", () => {
     const image = document.querySelector("img")
 
     image.onerror = () => {
-        image.src = pickCatImageFromCache()
+        image.src = pickCatFromLocal()
+    }
+
+    image.onload = () => {
+        clearTimeout(timeoutChecker)
     }
 
     const SetRandomCatImage = () => {
-        image.src = pickCatImageUrl()
+        image.src = pickCatImage()
+        timeoutChecker = setTimeout(() => image.onerror(), LOAD_TIMEOUT)
     }
 
-    cacheUpdateHandler()
+    fileListUpdateHandler()
     SetRandomCatImage()
 
     document.addEventListener("keypress", (event) => {

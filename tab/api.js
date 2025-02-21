@@ -1,9 +1,19 @@
-const apiServerList = ["https://cat.kokoseij.xyz/list.json"]
+import { getFileName, getLocalHashList } from "./utils.js"
+
+const apiServerList = [
+    // "https://cat.kokoseij.xyz/list.json",
+    "https://cats-img.ch1ck.xyz/db.json",
+]
 
 /**
  * Cache TTL
  */
 const TTL = 7 * 24 * 3600
+
+/**
+ * API Code Version
+ */
+const VERSION = "v2"
 
 /**
  * Get timestamp
@@ -38,44 +48,51 @@ function getLastCacheTime() {
 /**
  * Update cat image list from api server
  */
-export function cacheUpdateHandler() {
+export function fileListUpdateHandler() {
     const stamp = getTimeStamp()
     const lastTime = getLastCacheTime()
 
-    if (lastTime != -1) {
+    if ((localStorage.getItem("apiVersion") ?? "") != VERSION) {
+        console.log("[cat-tab] API code updated, ignore TTL")
+    } else if (lastTime != -1) {
         const flow = stamp - lastTime
 
         if (flow < TTL) {
-            console.log("[cat-tab] ttl OK, cache update skipped")
+            console.log("[cat-tab] ttl OK, file list update skipped")
             return
         }
     }
 
+    console.log("[cat-tab] file list cleared")
     localStorage.clear()
+    localStorage.setItem("apiVersion", VERSION)
     localStorage.setItem("onCacheUpdated", stamp.toString())
 
+    let hashList = getLocalHashList()
     let trackedFileList = []
 
-    apiServerList.forEach((server) => {
-        fetch(server)
-            .then((resp) => resp.json())
-            .then((json) => {
-                json.forEach((item) => {
-                    const url = item["url"]
+    apiServerList.forEach(async (server) => {
+        const origin = new URL(server).origin
+        const resp = await fetch(server)
+        const json = await resp.json()
 
-                    if (url != null) {
-                        if (url.startsWith("https://")) {
-                            trackedFileList.push(url)
-                        } else {
-                            console.warn("NOT HTTPS")
-                        }
+        json.forEach((item) => {
+            if (item != null) {
+                if (item.startsWith("/")) {
+                    const hash = getFileName(item)
+
+                    if (!hashList.includes(hash)) {
+                        hashList.push(hash)
+                        trackedFileList.push(origin + item)
                     }
-                })
+                } else {
+                    console.warn("[API] DROP", item, "FROM", server)
+                }
+            }
+        })
 
-                localStorage.setItem("fileList", JSON.stringify(trackedFileList))
-            })
+        localStorage.setItem("fileList", JSON.stringify(trackedFileList))
     })
 
-    console.log("[cat-tab] cache cleared")
     console.log("[cat-tab] file list updated")
 }
