@@ -1,6 +1,6 @@
 {
     "name": "Cat Tab",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "author": "chick_0",
     "description": "Meet the cat on the new tab.",
     "chrome_url_overrides" : {
