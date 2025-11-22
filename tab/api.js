@@ -1,98 +1,141 @@
-import { getFileName, getLocalHashList } from "./utils.js"
+import cats from "./cats.js"
 
-const apiServerList = [
-    // "https://cat.kokoseij.xyz/list.json",
-    "https://cats-img.ch1ck.xyz/db.json",
-]
+const REMOTE_STATUS = "https://cats-a2a.pages.dev/db/status.json"
+const REMOTE_HASH_INDEX = "https://cats-a2a.pages.dev/db/hash_index.json"
 
-/**
- * Cache TTL
- */
-const TTL = 7 * 24 * 3600
+const KEY_LAST_CHECKED = "CAT_TAB_REMOTE_LAST_CHECKED"
+const KEY_REMOTE_VERSION = "CAT_TAB_REMOTE_VERSION"
+const KEY_CLIENT_VERSION = "CAT_TAB_CLIENT_VERSION"
+export const FILE_LIST = "CAT_TAB_FILTERED_FILE_LIST"
 
-/**
- * API Code Version
- */
-const VERSION = "v2"
+const OPT_CLIENT_VERSION = "v3"
+const OPT_TTL = 7 * 24 * 3600
+const OPT_TTL_M = OPT_TTL * 1000
 
-/**
- * Get timestamp
- *
- * @returns {Number} Timestamp (sec)
- */
-function getTimeStamp() {
-    return Math.floor(Date.now() / 1000)
+function isEmptyOrNull(obj) {
+    if (obj == null) {
+        return true
+    }
+
+    if (obj.length == 0) {
+        return true
+    }
+
+    return false
 }
 
-/**
- * Get last cache update time
- *
- * @returns {Number} Timestamp
- */
-function getLastCacheTime() {
-    const stamp = localStorage.getItem("onCacheUpdated")
+async function checkUpdateRequired() {
+    const client_version = localStorage.getItem(KEY_CLIENT_VERSION)
+    const last_checked = localStorage.getItem(KEY_LAST_CHECKED)
+    const version = localStorage.getItem(KEY_REMOTE_VERSION)
 
-    if (stamp == null) {
-        return -1
+    // localStorage null check
+    if (isEmptyOrNull(client_version)) {
+        console.log("* [CAT_TAB_CLIENT_VERSION] is null or missing!")
+        return true
+    }
+    if (isEmptyOrNull(last_checked)) {
+        console.log("* [KEY_LAST_CHECKED] is null or missing!")
+        return true
+    }
+    if (isEmptyOrNull(version)) {
+        console.log("* [KEY_REMOTE_VERSION] is null or missing!")
+        return true
     }
 
-    const parsedStamp = Number.parseInt(stamp)
-
-    if (Number.isNaN(parsedStamp)) {
-        return -1
+    // check client version
+    if (client_version != OPT_CLIENT_VERSION) {
+        console.log("* [OPT_CLIENT_VERSION] is outdated!")
+        return true
     }
 
-    return parsedStamp
+    // check ttl
+    const lc_date = new Date(last_checked)
+
+    if (Date.now() - lc_date >= OPT_TTL_M) {
+        console.log("* [KEY_LAST_CHECKED] is outdated!")
+        return true
+    }
+
+    // check remote version
+    const remote = await getRemoteVersion()
+
+    if (version != remote) {
+        console.log("* [KEY_REMOTE_VERSION] is outdated!")
+        return true
+    }
+
+    // up-to-date!
+    return false
 }
 
-/**
- * Update cat image list from api server
- */
-export function fileListUpdateHandler() {
-    const stamp = getTimeStamp()
-    const lastTime = getLastCacheTime()
+async function getRemoteVersion() {
+    const cache = sessionStorage.getItem(KEY_REMOTE_VERSION)
 
-    if ((localStorage.getItem("apiVersion") ?? "") != VERSION) {
-        console.log("[cat-tab] API code updated, ignore TTL")
-    } else if (lastTime != -1) {
-        const flow = stamp - lastTime
+    if (isEmptyOrNull(cache)) {
+        const resp = await fetch(REMOTE_STATUS)
+        console.log("GET", REMOTE_STATUS)
 
-        if (flow < TTL) {
-            console.log("[cat-tab] ttl OK, file list update skipped")
-            return
-        }
-    }
-
-    console.log("[cat-tab] file list cleared")
-    localStorage.clear()
-    localStorage.setItem("apiVersion", VERSION)
-    localStorage.setItem("onCacheUpdated", stamp.toString())
-
-    let hashList = getLocalHashList()
-    let trackedFileList = []
-
-    apiServerList.forEach(async (server) => {
-        const origin = new URL(server).origin
-        const resp = await fetch(server)
         const json = await resp.json()
+        sessionStorage.setItem(KEY_REMOTE_VERSION, json["version"])
+        return json["version"]
+    }
 
-        json.forEach((item) => {
-            if (item != null) {
-                if (item.startsWith("/")) {
-                    const hash = getFileName(item)
+    console.log("HIT", REMOTE_STATUS)
+    return cache
+}
 
-                    if (!hashList.includes(hash)) {
-                        hashList.push(hash)
-                        trackedFileList.push(origin + item)
-                    }
-                } else {
-                    console.warn("[API] DROP", item, "FROM", server)
-                }
+async function getHashIndex() {
+    const cache = sessionStorage.getItem(REMOTE_HASH_INDEX)
+
+    if (isEmptyOrNull(cache)) {
+        const resp = await fetch(REMOTE_HASH_INDEX)
+        console.log("GET", REMOTE_HASH_INDEX)
+
+        const json = await resp.json()
+        sessionStorage.setItem(REMOTE_HASH_INDEX, JSON.stringify(json))
+        return json
+    }
+
+    console.log("HIT", REMOTE_HASH_INDEX)
+    return JSON.parse(cache)
+}
+
+export async function updateRemoteData() {
+    const isUpdateRequired = await checkUpdateRequired()
+
+    if (!isUpdateRequired) {
+        console.log("* Update passed!")
+        return
+    }
+
+    // do update
+    const hashIndex = await getHashIndex()
+    const origin = new URL(REMOTE_HASH_INDEX).origin
+    let add = []
+
+    Object.keys(hashIndex).forEach((hash) => {
+        let isDuplicated = false
+
+        for (let i = 0; i < cats.length; i++) {
+            isDuplicated = cats[i].includes(hash)
+
+            if (isDuplicated) {
+                break
             }
-        })
+        }
 
-        localStorage.setItem("fileList", JSON.stringify(trackedFileList))
+        if (!isDuplicated) {
+            add.push(origin + hashIndex[hash])
+        }
     })
 
-    console.log("[cat-tab] file list updated")
+    // update storage
+    const latestVersion = await getRemoteVersion()
+
+    localStorage.clear()
+    localStorage.setItem(KEY_LAST_CHECKED, new Date().toISOString())
+    localStorage.setItem(KEY_REMOTE_VERSION, latestVersion)
+    localStorage.setItem(KEY_CLIENT_VERSION, OPT_CLIENT_VERSION)
+    localStorage.setItem(FILE_LIST, JSON.stringify(add))
 }

@@ -1,13 +1,29 @@
-import { fileListUpdateHandler } from "./api.js"
-import { pickCatImage, pickCatFromLocal } from "./utils.js"
+import cats from "./cats.js"
+import { FILE_LIST, updateRemoteData } from "./api.js"
 
 /** Image load timeout  */
-const LOAD_TIMEOUT = 1000
+const LOAD_TIMEOUT = 850
 
 /** timeout ID */
 let timeoutChecker = null
 
-document.addEventListener("DOMContentLoaded", () => {
+function pickCatImage() {
+    let fileList = localStorage.getItem(FILE_LIST) ?? []
+
+    if (typeof fileList == "string") {
+        fileList = JSON.parse(fileList)
+    }
+
+    const array = fileList.concat(cats)
+
+    return array[Math.ceil(Math.random() * array.length) - 1]
+}
+
+function pickCatFromLocal() {
+    return cats[Math.ceil(Math.random() * cats.length) - 1]
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
     const image = document.querySelector("img")
 
     image.onerror = () => {
@@ -16,22 +32,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     image.onload = () => {
         clearTimeout(timeoutChecker)
+        timeoutChecker = null
     }
 
-    const SetRandomCatImage = () => {
-        image.src = pickCatImage()
-        timeoutChecker = setTimeout(() => image.onerror(), LOAD_TIMEOUT)
-    }
+    //
+    await updateRemoteData()
 
-    fileListUpdateHandler()
-    SetRandomCatImage()
-
-    document.addEventListener("keypress", (event) => {
-        switch (event.key) {
-            case "r":
-            case "R":
-                SetRandomCatImage()
-                break
-        }
-    })
+    //
+    image.src = pickCatImage()
+    timeoutChecker = setTimeout(() => image.onerror(), LOAD_TIMEOUT)
 })
