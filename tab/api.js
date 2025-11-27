@@ -1,14 +1,14 @@
 import cats from "./cats.js"
 
-const REMOTE_STATUS = "https://cats-a2a.pages.dev/db/status.json"
-const REMOTE_HASH_INDEX = "https://cats-a2a.pages.dev/db/hash_index.json"
+const REMOTE_VERSION = "https://cats-a2a.pages.dev/db/version.txt"
+const REMOTE_HASH_INDEX = "https://cats-a2a.pages.dev/db/hash.json"
 
 const KEY_LAST_CHECKED = "CAT_TAB_REMOTE_LAST_CHECKED"
 const KEY_REMOTE_VERSION = "CAT_TAB_REMOTE_VERSION"
 const KEY_CLIENT_VERSION = "CAT_TAB_CLIENT_VERSION"
 export const FILE_LIST = "CAT_TAB_FILTERED_FILE_LIST"
 
-const OPT_CLIENT_VERSION = "v4"
+const OPT_CLIENT_VERSION = "v5"
 const OPT_TTL = 7 * 24 * 3600
 const OPT_TTL_M = OPT_TTL * 1000
 
@@ -73,15 +73,22 @@ async function getRemoteVersion() {
     const cache = sessionStorage.getItem(KEY_REMOTE_VERSION)
 
     if (isEmptyOrNull(cache)) {
-        const resp = await fetch(REMOTE_STATUS)
-        console.log("GET", REMOTE_STATUS)
+        const resp = await fetch(REMOTE_VERSION)
+        console.log("GET", REMOTE_VERSION)
 
-        const json = await resp.json()
-        sessionStorage.setItem(KEY_REMOTE_VERSION, json["version"])
-        return json["version"]
+        if (!resp.ok) {
+            console.warn("[!] Fail to get latest remote version!!")
+            return null
+        }
+
+        // response is text
+        const text = await resp.text()
+        sessionStorage.setItem(KEY_REMOTE_VERSION, text)
+
+        return text
     }
 
-    console.log("HIT", REMOTE_STATUS)
+    console.log("HIT", REMOTE_VERSION)
     return cache
 }
 
@@ -91,6 +98,11 @@ async function getHashIndex() {
     if (isEmptyOrNull(cache)) {
         const resp = await fetch(REMOTE_HASH_INDEX)
         console.log("GET", REMOTE_HASH_INDEX)
+
+        if (!resp.ok) {
+            console.warn("[!] Fail to get remote hash index!!")
+            return []
+        }
 
         const json = await resp.json()
         sessionStorage.setItem(REMOTE_HASH_INDEX, JSON.stringify(json))
@@ -111,7 +123,7 @@ export async function updateRemoteData() {
 
     // do update
     const hashIndex = await getHashIndex()
-    const origin = new URL(REMOTE_HASH_INDEX).origin
+    const origin = new URL(REMOTE_HASH_INDEX).origin + "/cats/"
     let add = []
 
     Object.keys(hashIndex).forEach((hash) => {
